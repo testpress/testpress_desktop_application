@@ -1,0 +1,40 @@
+# Node modules
+node_modules/
+
+# Compiled output
+dist/
+release/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*
+
+# Editor directories and files
+.idea/
+.vscode/
+*.sw?
+
+# Build cache
+.cache/
+out/
+
+# Electron builder auto-generated files
+/build/
+*.dmg
+*.exe
+*.app
+*.snap
+*.AppImage
+
+# Optional: exclude coverage if using testing tools
+coverage/
