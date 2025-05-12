@@ -13,8 +13,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-
-  // Load the Testpress portal URL
+  mainWindow.setContentProtection(true);
   mainWindow.loadURL('https://lmsdemo.testpress.in/');
 }
 
