@@ -6,30 +6,45 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && electron-forge start",
-    "package": "npm run build && electron-forge package",
-    "make": "npm run build && electron-forge make"
+    "start": "tsc && electron .",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win",
+    "dist:mas": "electron-builder --mac mas"
   },
   "keywords": [],
   "author": "Testpress",
   "license": "ISC",
   "description": "Testpress Desktop Application",
   "devDependencies": {
-    "@electron-forge/cli": "^7.8.0",
-    "@electron-forge/maker-deb": "^7.8.0",
-    "@electron-forge/maker-rpm": "^7.8.0",
-    "@electron-forge/maker-squirrel": "^7.8.0",
-    "@electron-forge/maker-zip": "^7.8.0",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.8.0",
-    "@electron-forge/plugin-fuses": "^7.8.0",
-    "@electron/fuses": "^1.8.0",
-    "@types/node": "^22.15.17",
     "electron": "^36.2.0",
+    "electron-builder": "^26.0.12",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "@types/node": "^22.15.17"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
     "electron-unhandled": "^5.0.0"
+  },
+  "build": {
+    "appId": "com.testpress.desktop",
+    "productName": "Testpress",
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.education"
+    },
+    "win": {
+      "target": ["nsis"]
+    }
   }
 }
