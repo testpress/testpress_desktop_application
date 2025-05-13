@@ -1,7 +1,14 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
+import { app, BrowserWindow } from 'electron';
+import electronUnhandled from 'electron-unhandled';
 
-let mainWindow;
+electronUnhandled({
+  showDialog: true,
+  logger: (err: Error) => {
+    console.error('Unhandled error:', err);
+  },
+});
+
+let mainWindow: BrowserWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -10,10 +17,17 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js'),
     },
   });
   mainWindow.setContentProtection(true);
+  mainWindow.webContents.on('did-fail-load', async () => {
+    const isOnline = await mainWindow.webContents.executeJavaScript('navigator.onLine');
+    if (!isOnline) {
+      mainWindow.loadFile('./public/offline.html');
+    } else {
+      mainWindow.loadFile('./public/error.html');
+    }
+  });  
   mainWindow.loadURL('https://lmsdemo.testpress.in/');
 }
 
