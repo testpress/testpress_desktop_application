@@ -29,12 +29,9 @@ Thumbs.db
 out/
 
 # Electron builder auto-generated files
-/build/
-*.dmg
-*.exe
-*.app
-*.snap
-*.AppImage
+build/*.app
+build/*.dmg
+build/*.pkg
 
 # Optional: exclude coverage if using testing tools
 coverage/

@@ -1,16 +1,17 @@
 {
   "name": "testpress_desktop_application",
   "productName": "Testpress",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
     "start": "tsc && electron .",
     "dist": "electron-builder",
-    "dist:mac": "electron-builder --mac",
-    "dist:win": "electron-builder --win",
-    "dist:mas": "electron-builder --mac mas"
+    "dist:mac-arm": "npm run build && electron-builder --mac --arm64",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mas": "npm run build && electron-builder --mac mas --arm64",
+    "dist:mas-dev": "npm run build && electron-builder --mac mas-dev --arm64"
   },
   "keywords": [],
   "author": "Testpress",
@@ -28,23 +29,53 @@
     "electron-unhandled": "^5.0.0"
   },
   "build": {
-    "appId": "com.testpress.desktop",
+    "appId": "in.testpress.lmsdemo.desktop",
     "productName": "Testpress",
     "files": [
       "dist/**/*",
       "node_modules/**/*",
-      "main.js",
-      "package.json"
+      "package.json",
+      "assets/**/*",
+      "public/**/*"
     ],
     "directories": {
       "output": "release"
     },
     "mac": {
-      "target": ["dmg", "zip"],
-      "category": "public.app-category.education"
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.education",
+      "icon": "assets/icon.icns",
+      "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)",
+      "hardenedRuntime": true,
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "gatekeeperAssess": true,
+      "provisioningProfile": "LMSDemoDesktopProfile.provisionprofile"
+    },
+    "mas": {
+      "target": [
+        {
+          "target": "mas",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.education",
+      "icon": "assets/icon.icns",
+      "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)",
+      "hardenedRuntime": true,
+      "entitlements": "build/entitlements.mas.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "gatekeeperAssess": false,
+      "provisioningProfile": "LMSDemoDesktopProfile.provisionprofile"
     },
     "win": {
-      "target": ["nsis"]
+      "target": ["nsis"],
+      "icon": "assets/icon.ico"
     }
   }
 }

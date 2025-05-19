@@ -16,6 +16,7 @@ function createWindow() {
     height: 800,
     webPreferences: {
       nodeIntegration: false,
+      sandbox: true,
       contextIsolation: true,
     },
   });
@@ -27,7 +28,9 @@ function createWindow() {
     } else {
       mainWindow.loadFile('./public/error.html');
     }
-  });  
+  }); 
+  const userAgent = "Desktop Application";
+  mainWindow.webContents.setUserAgent(`${mainWindow.webContents.getUserAgent()} ${userAgent}`); 
   mainWindow.loadURL('https://lmsdemo.testpress.in/');
 }
 
