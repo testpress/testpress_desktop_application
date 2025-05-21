@@ -1,28 +1,27 @@
 {
   "name": "testpress_desktop_application",
   "productName": "Testpress",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "type": "module",
+  "description": "Testpress Desktop Application",
+  "author": "Testpress",
+  "license": "ISC",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
-    "start": "tsc && electron .",
-    "dist": "electron-builder",
+    "start": "npm run build && electron .",
+    "dist": "npm run build && electron-builder",
     "dist:mac-arm": "npm run build && electron-builder --mac --arm64",
     "dist:win": "npm run build && electron-builder --win",
-    "dist:mas": "npm run build && electron-builder --mac mas --arm64",
-    "dist:mas-dev": "npm run build && electron-builder --mac mas-dev --arm64"
+    "dist:mas": "npm run build && electron-builder --mac mas --universal",
+    "dist:mas-dev": "npm run build && electron-builder --mac mas-dev --universal"
   },
-  "keywords": [],
-  "author": "Testpress",
-  "license": "ISC",
-  "description": "Testpress Desktop Application",
   "devDependencies": {
-    "electron": "^36.2.0",
+    "@types/node": "^22.15.17",
+    "electron": "^36.2.1",
     "electron-builder": "^26.0.12",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3",
-    "@types/node": "^22.15.17"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
@@ -42,39 +41,26 @@
       "output": "release"
     },
     "mac": {
-      "target": [
-        {
-          "target": "dmg",
-          "arch": ["x64", "arm64"]
-        }
-      ],
+      "target": "mas",
       "category": "public.app-category.education",
       "icon": "assets/icon.icns",
-      "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)",
-      "hardenedRuntime": true,
+      "hardenedRuntime": false,
+      "gatekeeperAssess": true,
       "entitlements": "build/entitlements.mas.plist",
       "entitlementsInherit": "build/entitlements.mas.inherit.plist",
-      "gatekeeperAssess": true,
-      "provisioningProfile": "LMSDemoDesktopProfile.provisionprofile"
+      "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
+      "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)"
     },
     "mas": {
-      "target": [
-        {
-          "target": "mas",
-          "arch": ["x64", "arm64"]
-        }
-      ],
-      "category": "public.app-category.education",
-      "icon": "assets/icon.icns",
-      "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)",
-      "hardenedRuntime": true,
-      "entitlements": "build/entitlements.mas.plist",
-      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
-      "gatekeeperAssess": false,
-      "provisioningProfile": "LMSDemoDesktopProfile.provisionprofile"
+      "type": "distribution"
+    },
+    "masDev": {
+      "type": "development"
     },
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "icon": "assets/icon.ico"
     }
   }
