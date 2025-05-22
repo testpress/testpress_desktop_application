@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import electronUnhandled from 'electron-unhandled';
+import config from '../app-config.json' with { type: 'json' };
 
 electronUnhandled({
   showDialog: true,
@@ -29,8 +30,14 @@ function createWindow() {
       mainWindow.loadFile('./public/error.html');
     }
   }); 
-  const userAgent = "Desktop Application";
-  mainWindow.webContents.setUserAgent(`${mainWindow.webContents.getUserAgent()} ${userAgent}`); 
+  const userAgentAddition = process.platform === 'darwin'
+    ? `AppStoreID/${config.macAppStoreId}`
+    : process.platform === 'win32'
+    ? `MSStoreID/${config.windowsStoreId}`
+    : '';
+  const userAgent = `${mainWindow.webContents.getUserAgent()} Desktop ${userAgentAddition}`;
+  mainWindow.webContents.setUserAgent(userAgent);
+
   mainWindow.loadURL('https://lmsdemo.testpress.in/');
 }
 

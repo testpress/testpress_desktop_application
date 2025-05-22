@@ -1,0 +1,10 @@
+{
+  "productName": "Testpress",
+  "appId": "in.testpress.lmsdemo.desktop",
+  "macAppStoreId": "6745862112",
+  "windowsStoreId": "9WZDNCRFJ3Q8",
+  "author": "Testpress",
+  "description": "Testpress Desktop Application",
+  "provisioningProfile": "lmsdemoDevelopmentprovisionprofile.provisionprofile",
+  "identity": "Dineshkumar Padmanaban (4YLSUL864R)"
+}

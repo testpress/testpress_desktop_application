@@ -13,8 +13,8 @@
     "dist": "npm run build && electron-builder",
     "dist:mac-arm": "npm run build && electron-builder --mac --arm64",
     "dist:win": "npm run build && electron-builder --win",
-    "dist:mas": "npm run build && electron-builder --mac mas --universal",
-    "dist:mas-dev": "npm run build && electron-builder --mac mas-dev --universal"
+    "dist:mas": "npm run build && electron-builder --config electron-builder.config.cjs --mac mas --universal",
+    "dist:mas-dev": "npm run build && electron-builder --config electron-builder.config.cjs --mac mas-dev --universal"
   },
   "devDependencies": {
     "@types/node": "^22.15.17",
@@ -26,42 +26,5 @@
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
     "electron-unhandled": "^5.0.0"
-  },
-  "build": {
-    "appId": "in.testpress.lmsdemo.desktop",
-    "productName": "Testpress",
-    "files": [
-      "dist/**/*",
-      "node_modules/**/*",
-      "package.json",
-      "assets/**/*",
-      "public/**/*"
-    ],
-    "directories": {
-      "output": "release"
-    },
-    "mac": {
-      "target": "mas",
-      "category": "public.app-category.education",
-      "icon": "assets/icon.icns",
-      "hardenedRuntime": false,
-      "gatekeeperAssess": true,
-      "entitlements": "build/entitlements.mas.plist",
-      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
-      "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
-      "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)"
-    },
-    "mas": {
-      "type": "distribution"
-    },
-    "masDev": {
-      "type": "development"
-    },
-    "win": {
-      "target": [
-        "nsis"
-      ],
-      "icon": "assets/icon.ico"
-    }
   }
 }
