@@ -34,5 +34,11 @@ module.exports = {
   win: {
     target: ["nsis"],
     icon: "assets/icon.ico"
+  },
+  nsis: {
+    oneClick: true,
+    createDesktopShortcut: true,
+    createStartMenuShortcut: true,
+    shortcutName: config.productName
   }
 };
