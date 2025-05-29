@@ -18,6 +18,7 @@ function createWindow() {
       nodeIntegration: false,
       sandbox: false,
       contextIsolation: true,
+      devTools: false,
     },
   });
   mainWindow.setContentProtection(true);
