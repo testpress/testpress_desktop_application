@@ -11,7 +11,7 @@
     "build": "tsc",
     "start": "npm run build && electron .",
     "dist": "npm run build && electron-builder",
-    "dist:mac-arm": "npm run build && electron-builder --mac --arm64",
+    "dist:mac": "npm run build && electron-builder --config electron-builder.config.cjs --mac --universal",
     "dist:win": "npm run build && electron-builder --config electron-builder.config.cjs --win",
     "dist:mas": "npm run build && electron-builder --config electron-builder.config.cjs --mac mas --universal",
     "dist:mas-dev": "npm run build && electron-builder --config electron-builder.config.cjs --mac mas-dev --universal"

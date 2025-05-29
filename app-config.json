@@ -5,6 +5,6 @@
   "windowsStoreId": "9WZDNCRFJ3Q8",
   "author": "Testpress",
   "description": "Testpress Desktop Application",
-  "provisioningProfile": "lmsdemoDevelopmentprovisionprofile.provisionprofile",
-  "identity": "Dineshkumar Padmanaban (4YLSUL864R)"
+  "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
+  "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)"
 }

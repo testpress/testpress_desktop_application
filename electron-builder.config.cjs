@@ -15,15 +15,18 @@ module.exports = {
     output: "release"
   },
   mac: {
-    target: "mas",
+    target: ["dmg"],
     category: "public.app-category.education",
     icon: "assets/icon.icns",
-    hardenedRuntime: false,
+    hardenedRuntime: true,
     gatekeeperAssess: true,
-    entitlements: "build/entitlements.mas.plist",
-    entitlementsInherit: "build/entitlements.mas.inherit.plist",
-    provisioningProfile: config.provisioningProfile,
-    identity: config.identity
+    entitlements: "build/entitlements.mac.plist",
+    entitlementsInherit: "build/entitlements.mac.inherit.plist",
+    identity: config.identity,
+    notarize: true
+  },
+  dmg: {
+    sign: false
   },
   mas: {
     type: "distribution"
