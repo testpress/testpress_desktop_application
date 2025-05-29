@@ -29,7 +29,8 @@ function createWindow() {
       mainWindow.loadFile('./public/error.html');
     }
   }); 
-  mainWindow.webContents.setUserAgent("Testpress Desktop Application");
+  const baseUA = mainWindow.webContents.getUserAgent();
+  mainWindow.webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
 
   mainWindow.loadURL('https://lmsdemo.testpress.in/');
 }
