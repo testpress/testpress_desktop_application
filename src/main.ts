@@ -7,7 +7,8 @@ electronUnhandled({
     console.error('Unhandled error:', err);
   },
 });
-
+app.commandLine.appendSwitch('enable-widevine-cdm');
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 let mainWindow: BrowserWindow;
 
 function createWindow() {
@@ -18,6 +19,8 @@ function createWindow() {
       nodeIntegration: false,
       sandbox: false,
       contextIsolation: true,
+      webSecurity: true,
+      plugins: true,
       devTools: false,
     },
   });
