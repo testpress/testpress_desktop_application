@@ -25,6 +25,9 @@ module.exports = {
     identity: config.identity,
     notarize: true
   },
+  electronDownload: {
+    "mirror": "https://github.com/castlabs/electron-releases/releases/download/v"
+  },
   dmg: {
     sign: false
   },

@@ -12,13 +12,13 @@
     "start": "npm run build && electron .",
     "dist": "npm run build && electron-builder",
     "dist:mac": "npm run build && electron-builder --config electron-builder.config.cjs --mac --universal",
-    "dist:win": "npm run build && electron-builder --config electron-builder.config.cjs --win",
+    "dist:win": "npm run build && electron-builder --config electron-builder.config.cjs --win --x64",
     "dist:mas": "npm run build && electron-builder --config electron-builder.config.cjs --mac mas --universal",
     "dist:mas-dev": "npm run build && electron-builder --config electron-builder.config.cjs --mac mas-dev --universal"
   },
   "devDependencies": {
     "@types/node": "^22.15.17",
-    "electron": "^36.2.1",
+    "electron": "github:castlabs/electron-releases#v30.0.9+wvcus",
     "electron-builder": "^26.0.12",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
