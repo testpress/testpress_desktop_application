@@ -14,6 +14,7 @@ module.exports = {
   directories: {
     output: "release"
   },
+  afterPack: "scripts/evs-sign.js",
   mac: {
     target: ["dmg"],
     category: "public.app-category.education",
