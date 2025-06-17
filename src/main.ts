@@ -1,84 +1,22 @@
-import { app, BrowserWindow, dialog } from 'electron';
+import { app } from 'electron';
 import electronUnhandled from 'electron-unhandled';
-import psList from 'ps-list';
+import { createMainWindow } from './createMainWindow.js';
+import { registerScreenRecorderBlocker } from './recorderProtector.js';
 
 electronUnhandled({
   showDialog: true,
-  logger: (err: Error) => {
-    console.error('Unhandled error:', err);
-  },
+  logger: (err: Error) => console.error('Unhandled error:', err),
 });
+
 app.commandLine.appendSwitch('enable-widevine-cdm');
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
-let mainWindow: BrowserWindow;
-
-async function registerCheckerForRecordersOnMacOS(): Promise<void> {
-  if (process.platform === 'darwin') {
-    const forbiddenApps = [
-      'screencapture', 'obs', 'obs-ffmpeg-mux', 'quicktime', 'quicktimeplayerd',
-      'camtasia', 'snagit', 'screenflow', 'kap', 'screenflick', 'loom', 'recordit',
-      'cleanshot', 'monosnap', 'vlc', 'gyazo',
-    ].map(app => app.toLowerCase());
-
-    const intervalId = setInterval(async () => {
-      try {
-        const processes = await psList();
-        const found = processes.find(p =>
-          forbiddenApps.some(app => p.name?.toLowerCase().includes(app))
-        );
-        if (found) {
-          console.warn(`Forbidden screen recording app detected: ${found.name}`);
-          await dialog.showMessageBox({
-            type: 'warning',
-            title: 'Security Alert',
-            message: `Detected screen recording application: ${found.name}. Closing the app for security.`,
-          });
-          app.exit(1);
-          process.exit(1);
-        }
-      } catch (err) {
-        console.error('Recorder scan failed:', err);
-      }
-    }, 10_000);
-
-    app.once('will-quit', () => clearInterval(intervalId));
-  }
-}
-
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      nodeIntegration: false,
-      sandbox: false,
-      contextIsolation: true,
-      webSecurity: true,
-      plugins: true,
-      devTools: false,
-    },
-  });
-  mainWindow.setContentProtection(true);
-  mainWindow.webContents.on('did-fail-load', async () => {
-    const isOnline = await mainWindow.webContents.executeJavaScript('navigator.onLine');
-    if (!isOnline) {
-      mainWindow.loadFile('./public/offline.html');
-    } else {
-      mainWindow.loadFile('./public/error.html');
-    }
-  }); 
-  const baseUA = mainWindow.webContents.getUserAgent();
-  mainWindow.webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
-
-  mainWindow.loadURL('https://lmsdemo.testpress.in/');
-}
 
 app.whenReady().then(() => {
-  registerCheckerForRecordersOnMacOS();
-  createWindow();
+  registerScreenRecorderBlocker();
+  createMainWindow();
 });
 
-app.on('web-contents-created', (event, contents) => {
+app.on('web-contents-created', (_event, contents) => {
   contents.on('did-create-window', (childWindow) => {
     childWindow.setContentProtection(true);
   });
