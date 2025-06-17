@@ -1,45 +1,26 @@
-import { app, BrowserWindow } from 'electron';
+import { app } from 'electron';
 import electronUnhandled from 'electron-unhandled';
+import { createMainWindow } from './createMainWindow.js';
+import { registerScreenRecorderBlocker } from './recorderProtector.js';
 
 electronUnhandled({
   showDialog: true,
-  logger: (err: Error) => {
-    console.error('Unhandled error:', err);
-  },
+  logger: (err: Error) => console.error('Unhandled error:', err),
 });
+
 app.commandLine.appendSwitch('enable-widevine-cdm');
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
-let mainWindow: BrowserWindow;
 
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      nodeIntegration: false,
-      sandbox: false,
-      contextIsolation: true,
-      webSecurity: true,
-      plugins: true,
-      devTools: false,
-    },
+app.whenReady().then(() => {
+  registerScreenRecorderBlocker();
+  createMainWindow();
+});
+
+app.on('web-contents-created', (_event, contents) => {
+  contents.on('did-create-window', (childWindow) => {
+    childWindow.setContentProtection(true);
   });
-  mainWindow.setContentProtection(true);
-  mainWindow.webContents.on('did-fail-load', async () => {
-    const isOnline = await mainWindow.webContents.executeJavaScript('navigator.onLine');
-    if (!isOnline) {
-      mainWindow.loadFile('./public/offline.html');
-    } else {
-      mainWindow.loadFile('./public/error.html');
-    }
-  }); 
-  const baseUA = mainWindow.webContents.getUserAgent();
-  mainWindow.webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
-
-  mainWindow.loadURL('https://lmsdemo.testpress.in/');
-}
-
-app.whenReady().then(createWindow);
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
