@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import electronUnhandled from 'electron-unhandled';
+import find from 'find-process';
 
 electronUnhandled({
   showDialog: true,
@@ -10,6 +11,43 @@ electronUnhandled({
 app.commandLine.appendSwitch('enable-widevine-cdm');
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 let mainWindow: BrowserWindow;
+
+async function registerCheckerForRecordersOnMacOS(): Promise<void> {
+  if (process.platform === 'darwin') {
+    const forbiddenApps = [
+      'screencapture',
+      'obs',
+      'obs-ffmpeg-mux',
+      'quicktime',
+      'quicktimeplayerd',
+      'camtasia',
+      'snagit',
+      'screenflow',
+      'kap',
+      'screenflick',
+      'loom',
+      'recordit',
+      'cleanshot',
+      'monosnap',
+      'vlc',
+      'gyazo',
+    ];
+    setInterval(async () => {
+      for (const appName of forbiddenApps) {
+        try {
+          const found = await find('name', appName);
+          if (found.length > 0) {
+            console.warn(`Forbidden screen recording app detected: ${appName}`);
+            app.exit(1);
+            process.exit(1);
+          }
+        } catch (error) {
+          console.error(`Error while checking for process "${appName}":`, error);
+        }
+      }
+    }, 10000);
+  }
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -39,7 +77,16 @@ function createWindow() {
   mainWindow.loadURL('https://lmsdemo.testpress.in/');
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  registerCheckerForRecordersOnMacOS();
+  createWindow();
+});
+
+app.on('web-contents-created', (event, contents) => {
+  contents.on('did-create-window', (childWindow) => {
+    childWindow.setContentProtection(true);
+  });
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
