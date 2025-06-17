@@ -1,6 +1,6 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog } from 'electron';
 import electronUnhandled from 'electron-unhandled';
-import find from 'find-process';
+import psList from 'ps-list';
 
 electronUnhandled({
   showDialog: true,
@@ -15,37 +15,33 @@ let mainWindow: BrowserWindow;
 async function registerCheckerForRecordersOnMacOS(): Promise<void> {
   if (process.platform === 'darwin') {
     const forbiddenApps = [
-      'screencapture',
-      'obs',
-      'obs-ffmpeg-mux',
-      'quicktime',
-      'quicktimeplayerd',
-      'camtasia',
-      'snagit',
-      'screenflow',
-      'kap',
-      'screenflick',
-      'loom',
-      'recordit',
-      'cleanshot',
-      'monosnap',
-      'vlc',
-      'gyazo',
-    ];
-    setInterval(async () => {
-      for (const appName of forbiddenApps) {
-        try {
-          const found = await find('name', appName);
-          if (found.length > 0) {
-            console.warn(`Forbidden screen recording app detected: ${appName}`);
-            app.exit(1);
-            process.exit(1);
-          }
-        } catch (error) {
-          console.error(`Error while checking for process "${appName}":`, error);
+      'screencapture', 'obs', 'obs-ffmpeg-mux', 'quicktime', 'quicktimeplayerd',
+      'camtasia', 'snagit', 'screenflow', 'kap', 'screenflick', 'loom', 'recordit',
+      'cleanshot', 'monosnap', 'vlc', 'gyazo',
+    ].map(app => app.toLowerCase());
+
+    const intervalId = setInterval(async () => {
+      try {
+        const processes = await psList();
+        const found = processes.find(p =>
+          forbiddenApps.some(app => p.name?.toLowerCase().includes(app))
+        );
+        if (found) {
+          console.warn(`Forbidden screen recording app detected: ${found.name}`);
+          await dialog.showMessageBox({
+            type: 'warning',
+            title: 'Security Alert',
+            message: `Detected screen recording application: ${found.name}. Closing the app for security.`,
+          });
+          app.exit(1);
+          process.exit(1);
         }
+      } catch (err) {
+        console.error('Recorder scan failed:', err);
       }
-    }, 10000);
+    }, 10_000);
+
+    app.once('will-quit', () => clearInterval(intervalId));
   }
 }
 

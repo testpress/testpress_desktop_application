@@ -27,6 +27,7 @@
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1",
     "electron-unhandled": "^5.0.0",
-    "find-process": "^1.4.10"
+    "find-process": "^1.4.10",
+    "ps-list": "^8.1.1"
   }
 }
