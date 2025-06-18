@@ -1,7 +1,7 @@
 {
   "name": "testpress_desktop_application",
   "productName": "Testpress",
-  "version": "1.0.3",
+  "version": "1.0.1",
   "type": "module",
   "description": "Testpress Desktop Application",
   "author": "Testpress",
