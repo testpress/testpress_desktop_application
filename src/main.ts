@@ -1,5 +1,10 @@
 import { app, BrowserWindow } from 'electron';
 import electronUnhandled from 'electron-unhandled';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const appConfigPath = join(process.cwd(), 'app-config.json');
+const appConfig = JSON.parse(readFileSync(appConfigPath, 'utf8'));
 
 electronUnhandled({
   showDialog: true,
@@ -36,7 +41,7 @@ function createWindow() {
   const baseUA = mainWindow.webContents.getUserAgent();
   mainWindow.webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
 
-  mainWindow.loadURL('https://lmsdemo.testpress.in/');
+  mainWindow.loadURL(appConfig.homepageURL);
 }
 
 app.whenReady().then(createWindow);
