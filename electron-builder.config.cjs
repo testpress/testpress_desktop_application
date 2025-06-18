@@ -12,7 +12,7 @@ module.exports = {
     "app-config.json"
   ],
   directories: {
-    output: "release"
+    output: `release/${config.productName}`
   },
   afterPack: "scripts/evs-sign.js",
   mac: {
