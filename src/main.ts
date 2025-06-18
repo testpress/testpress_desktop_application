@@ -2,8 +2,12 @@ import { app, BrowserWindow } from 'electron';
 import electronUnhandled from 'electron-unhandled';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-const appConfigPath = join(process.cwd(), 'app-config.json');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const appConfigPath = join(__dirname, '..', 'app-config.json');
 const appConfig = JSON.parse(readFileSync(appConfigPath, 'utf8'));
 
 electronUnhandled({
