@@ -46,6 +46,12 @@ function createWindow() {
 
 app.whenReady().then(createWindow);
 
+app.on('web-contents-created', (_event, contents) => {
+  contents.on('did-create-window', (childWindow) => {
+    childWindow.setContentProtection(true);
+  });
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
