@@ -18,6 +18,8 @@ electronUnhandled({
 });
 app.commandLine.appendSwitch('enable-widevine-cdm');
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+// Set custom user agent globally for all windows
+app.userAgentFallback = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Testpress/1.0.1 Chrome/136.0.7103.49 Electron/36.2.0 Safari/537.36 Testpress Desktop Application';
 let mainWindow: BrowserWindow;
 
 function createWindow() {
@@ -42,8 +44,6 @@ function createWindow() {
       mainWindow.loadFile('./public/error.html');
     }
   }); 
-  const baseUA = mainWindow.webContents.getUserAgent();
-  mainWindow.webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
 
   mainWindow.loadURL(appConfig.homepageURL);
 }
