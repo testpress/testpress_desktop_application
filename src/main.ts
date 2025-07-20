@@ -18,8 +18,6 @@ electronUnhandled({
 });
 app.commandLine.appendSwitch('enable-widevine-cdm');
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
-// Set custom user agent globally for all windows
-app.userAgentFallback = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Testpress/1.0.1 Chrome/136.0.7103.49 Electron/36.2.0 Safari/537.36 Testpress Desktop Application';
 let mainWindow: BrowserWindow;
 
 function createWindow() {
@@ -51,8 +49,45 @@ function createWindow() {
 app.whenReady().then(createWindow);
 
 app.on('web-contents-created', (_event, contents) => {
+  // Set custom user agent suffix for all web contents (only if not already set)
+  const baseUA = contents.getUserAgent();
+  if (!baseUA.includes('Testpress Desktop Application')) {
+    contents.setUserAgent(`${baseUA} Testpress Desktop Application`);
+  }
+  
   contents.on('did-create-window', (childWindow) => {
     childWindow.setContentProtection(true);
+    // Set custom user agent suffix for child windows (only if not already set)
+    const childBaseUA = childWindow.webContents.getUserAgent();
+    if (!childBaseUA.includes('Testpress Desktop Application')) {
+      childWindow.webContents.setUserAgent(`${childBaseUA} Testpress Desktop Application`);
+    }
+  });
+  
+  // Handle new window requests (popups, target="_blank" links)
+  contents.setWindowOpenHandler(({ url }) => {
+    const childWindow = new BrowserWindow({
+      width: 1200,
+      height: 800,
+      webPreferences: {
+        nodeIntegration: false,
+        sandbox: false,
+        contextIsolation: true,
+        webSecurity: true,
+        plugins: true,
+        devTools: false,
+      },
+    });
+    childWindow.setContentProtection(true);
+    
+    // Set custom user agent for new windows (only if not already set)
+    const childBaseUA = childWindow.webContents.getUserAgent();
+    if (!childBaseUA.includes('Testpress Desktop Application')) {
+      childWindow.webContents.setUserAgent(`${childBaseUA} Testpress Desktop Application`);
+    }
+    
+    childWindow.loadURL(url);
+    return { action: 'deny' };
   });
 });
 
