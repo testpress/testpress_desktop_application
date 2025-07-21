@@ -20,20 +20,28 @@ app.commandLine.appendSwitch('enable-widevine-cdm');
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 let mainWindow: BrowserWindow;
 
+const windowOptions = {
+  width: 1200,
+  height: 800,
+  webPreferences: {
+    nodeIntegration: false,
+    sandbox: true,
+    contextIsolation: true,
+    webSecurity: true,
+    plugins: true,
+    devTools: false,
+  },
+};
+
+function setCustomUserAgent(webContents: Electron.WebContents) {
+  const baseUA = webContents.getUserAgent();
+  webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
+}
+
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      nodeIntegration: false,
-      sandbox: false,
-      contextIsolation: true,
-      webSecurity: true,
-      plugins: true,
-      devTools: false,
-    },
-  });
+  mainWindow = new BrowserWindow(windowOptions);
   mainWindow.setContentProtection(true);
+
   mainWindow.webContents.on('did-fail-load', async () => {
     const isOnline = await mainWindow.webContents.executeJavaScript('navigator.onLine');
     if (!isOnline) {
@@ -41,20 +49,27 @@ function createWindow() {
     } else {
       mainWindow.loadFile('./public/error.html');
     }
-  }); 
-  const baseUA = mainWindow.webContents.getUserAgent();
-  mainWindow.webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
+  });
+
+  setCustomUserAgent(mainWindow.webContents);
+
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    const childWindow = new BrowserWindow({
+      ...windowOptions,
+      parent: mainWindow,
+      modal: false,
+      show: true,
+    });
+    childWindow.setContentProtection(true);
+    setCustomUserAgent(childWindow.webContents);
+    childWindow.loadURL(url);
+    return { action: 'deny' };
+  });
 
   mainWindow.loadURL(appConfig.homepageURL);
 }
 
 app.whenReady().then(createWindow);
-
-app.on('web-contents-created', (_event, contents) => {
-  contents.on('did-create-window', (childWindow) => {
-    childWindow.setContentProtection(true);
-  });
-});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
