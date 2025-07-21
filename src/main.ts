@@ -45,16 +45,31 @@ function createWindow() {
   const baseUA = mainWindow.webContents.getUserAgent();
   mainWindow.webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
 
+  mainWindow.webContents.setWindowOpenHandler(({ url, features }) => {
+    const childWindow = new BrowserWindow({
+      parent: mainWindow,
+      modal: false,
+      show: true,
+      webPreferences: {
+        nodeIntegration: false,
+        sandbox: false,
+        contextIsolation: true,
+        webSecurity: true,
+        plugins: true,
+        devTools: false,
+      },
+    });
+    childWindow.setContentProtection(true);
+    const childBaseUA = childWindow.webContents.getUserAgent();
+    childWindow.webContents.setUserAgent(`${childBaseUA} Testpress Desktop Application`);
+    childWindow.loadURL(url);
+    return { action: 'deny' };
+  });
+
   mainWindow.loadURL(appConfig.homepageURL);
 }
 
 app.whenReady().then(createWindow);
-
-app.on('web-contents-created', (_event, contents) => {
-  contents.on('did-create-window', (childWindow) => {
-    childWindow.setContentProtection(true);
-  });
-});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
