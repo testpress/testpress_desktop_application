@@ -20,20 +20,28 @@ app.commandLine.appendSwitch('enable-widevine-cdm');
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 let mainWindow: BrowserWindow;
 
+const windowOptions = {
+  width: 1200,
+  height: 800,
+  webPreferences: {
+    nodeIntegration: false,
+    sandbox: false,
+    contextIsolation: true,
+    webSecurity: true,
+    plugins: true,
+    devTools: false,
+  },
+};
+
+function setCustomUserAgent(webContents: Electron.WebContents) {
+  const baseUA = webContents.getUserAgent();
+  webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
+}
+
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
-    webPreferences: {
-      nodeIntegration: false,
-      sandbox: false,
-      contextIsolation: true,
-      webSecurity: true,
-      plugins: true,
-      devTools: false,
-    },
-  });
+  mainWindow = new BrowserWindow(windowOptions);
   mainWindow.setContentProtection(true);
+
   mainWindow.webContents.on('did-fail-load', async () => {
     const isOnline = await mainWindow.webContents.executeJavaScript('navigator.onLine');
     if (!isOnline) {
@@ -41,27 +49,19 @@ function createWindow() {
     } else {
       mainWindow.loadFile('./public/error.html');
     }
-  }); 
-  const baseUA = mainWindow.webContents.getUserAgent();
-  mainWindow.webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
+  });
 
-  mainWindow.webContents.setWindowOpenHandler(({ url, features }) => {
+  setCustomUserAgent(mainWindow.webContents);
+
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     const childWindow = new BrowserWindow({
+      ...windowOptions,
       parent: mainWindow,
       modal: false,
       show: true,
-      webPreferences: {
-        nodeIntegration: false,
-        sandbox: false,
-        contextIsolation: true,
-        webSecurity: true,
-        plugins: true,
-        devTools: false,
-      },
     });
     childWindow.setContentProtection(true);
-    const childBaseUA = childWindow.webContents.getUserAgent();
-    childWindow.webContents.setUserAgent(`${childBaseUA} Testpress Desktop Application`);
+    setCustomUserAgent(childWindow.webContents);
     childWindow.loadURL(url);
     return { action: 'deny' };
   });
