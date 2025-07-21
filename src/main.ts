@@ -25,7 +25,7 @@ const windowOptions = {
   height: 800,
   webPreferences: {
     nodeIntegration: false,
-    sandbox: false,
+    sandbox: true,
     contextIsolation: true,
     webSecurity: true,
     plugins: true,
