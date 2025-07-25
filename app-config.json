@@ -1,11 +1,11 @@
 {
-  "productName": "Testpress",
-  "homepageURL": "https://lmsdemo.testpress.in/",
-  "appId": "in.testpress.lmsdemo.desktop",
+  "productName": "Vision IIT NEET Academy",
+  "homepageURL": "https://learn.visioniitneet.com/",
+  "appId": "in.testpress.visioniitneet.desktop",
   "macAppStoreId": "6745862112",
   "windowsStoreId": "9WZDNCRFJ3Q8",
   "author": "Testpress",
-  "description": "Testpress Desktop Application",
+  "description": "Vision IIT NEET Academy Desktop Application",
   "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
   "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)"
 }

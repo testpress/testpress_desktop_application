@@ -1,9 +1,9 @@
 {
-  "name": "testpress_desktop_application",
-  "productName": "Testpress",
+  "name": "visioniitneet_desktop_application",
+  "productName": "Vision IIT NEET Academy",
   "version": "1.0.1",
   "type": "module",
-  "description": "Testpress Desktop Application",
+  "description": "Vision IIT NEET Academy Desktop Application",
   "author": "Testpress",
   "license": "ISC",
   "main": "dist/main.js",
