@@ -39,8 +39,23 @@ module.exports = {
     type: "development"
   },
   win: {
-    target: ["nsis"],
+    target: [
+      {
+        target: "nsis",
+        arch: ["x64"]
+      },
+      {
+        target: "appx",
+        arch: ["x64"]
+      }
+    ],
     icon: "assets/icon.ico"
+  },
+  appx: {
+    identityName: config.appId,
+    publisher: config.publisherId,
+    publisherDisplayName: config.publisherDisplayName,
+    displayName: config.productName,
   },
   nsis: {
     oneClick: true,
