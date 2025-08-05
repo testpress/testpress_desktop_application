@@ -1,11 +1,11 @@
 {
-  "productName": "Testpress",
-  "homepageURL": "https://lmsdemo.testpress.in/",
-  "appId": "in.testpress.lmsdemo.desktop",
+  "productName": "Teammates Academy",
+  "homepageURL": "https://tests.teammatesacademy.com/",
+  "appId": "com.teammatesacademy.tests.desktop",
   "macAppStoreId": "6745862112",
   "windowsStoreId": "9WZDNCRFJ3Q8",
   "author": "Testpress",
-  "description": "Testpress Desktop Application",
+  "description": "Teammates Academy Desktop Application",
   "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
   "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)"
 }

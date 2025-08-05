@@ -18,7 +18,7 @@ module.exports = {
   mac: {
     target: ["dmg"],
     category: "public.app-category.education",
-    icon: "assets/icon.icns",
+    icon: "assets/Teammates_Academy.icns",
     hardenedRuntime: true,
     gatekeeperAssess: true,
     entitlements: "build/entitlements.mac.plist",
@@ -40,7 +40,7 @@ module.exports = {
   },
   win: {
     target: ["nsis"],
-    icon: "assets/icon.ico"
+    icon: "assets/Teammates_Academy.ico"
   },
   nsis: {
     oneClick: true,

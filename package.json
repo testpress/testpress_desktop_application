@@ -1,10 +1,10 @@
 {
-  "name": "testpress_desktop_application",
-  "productName": "Testpress",
+  "name": "teammates_academy_desktop_application",
+  "productName": "Teammates Academy",
   "version": "1.0.1",
   "type": "module",
-  "description": "Testpress Desktop Application",
-  "author": "Testpress",
+  "description": "Teammates Academy Desktop Application",
+  "author": "Teammates Academy",
   "license": "ISC",
   "main": "dist/main.js",
   "scripts": {
