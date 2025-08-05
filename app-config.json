@@ -1,11 +1,11 @@
 {
-  "productName": "Testpress",
-  "homepageURL": "https://lmsdemo.testpress.in/",
-  "appId": "in.testpress.lmsdemo.desktop",
+  "productName": "Mithavai",
+  "homepageURL": "https://mithavai.testpress.in/",
+  "appId": "in.testpress.mithavai.desktop",
   "macAppStoreId": "6745862112",
   "windowsStoreId": "9WZDNCRFJ3Q8",
   "author": "Testpress",
-  "description": "Testpress Desktop Application",
+  "description": "Mithavai Desktop Application",
   "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
   "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)"
 }

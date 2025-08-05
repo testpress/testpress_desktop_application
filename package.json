@@ -1,9 +1,9 @@
 {
-  "name": "testpress_desktop_application",
-  "productName": "Testpress",
+  "name": "mithavai_desktop_application",
+  "productName": "Mithavai",
   "version": "1.0.1",
   "type": "module",
-  "description": "Testpress Desktop Application",
+  "description": "Mithavai Desktop Application",
   "author": "Testpress",
   "license": "ISC",
   "main": "dist/main.js",
