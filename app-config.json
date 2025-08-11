@@ -8,6 +8,6 @@
   "description": "Testpress Desktop Application",
   "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
   "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)",
-  "publisherId": "27270D5F-9226-4A37-BF69-03BF0033FD28",
+  "publisherId": "CN=27270D5F-9226-4A37-BF69-03BF0033FD28",
   "publisherDisplayName": "Testpress Tech Labs"
 }
