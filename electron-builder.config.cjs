@@ -12,6 +12,7 @@ module.exports = {
     "app-config.json"
   ],
   directories: {
+    buildResources: "assets",
     output: `release/${config.productName}`
   },
   afterPack: "scripts/evs-sign.js",
