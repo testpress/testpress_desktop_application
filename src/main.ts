@@ -76,9 +76,7 @@ function createWindow() {
 
 function disableCopyAndSelection(childWindow: BrowserWindow) {
   childWindow.webContents.on('before-input-event', (event, input) => {
-    if (
-      (input.control && ['c'].includes(input.key.toLowerCase()))
-    ) {
+    if ((input.control || input.meta) && ['a', 'c', 'x'].includes(input.key.toLowerCase())) {
       event.preventDefault();
     }
   });
