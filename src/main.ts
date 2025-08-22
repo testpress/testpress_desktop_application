@@ -38,6 +38,7 @@ function setCustomUserAgent(webContents: Electron.WebContents) {
   webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
 }
 
+const GOOGLE_LOGIN_URL_PREFIX = 'https://accounts.google.com/';
 function createWindow() {
   mainWindow = new BrowserWindow(windowOptions);
   mainWindow.setContentProtection(true);
@@ -52,12 +53,11 @@ function createWindow() {
   });
 
   setCustomUserAgent(mainWindow.webContents);
-  const GOOGLE_LOGIN_URL_PREFIX = 'https://accounts.google.com/';
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-  if (url.startsWith(GOOGLE_LOGIN_URL_PREFIX)) {
-    return { action: 'allow' };
-  }
+    if (url.startsWith(GOOGLE_LOGIN_URL_PREFIX)) {
+      return { action: 'allow' };
+    }
     const childWindow = new BrowserWindow({
       ...windowOptions,
       parent: mainWindow,
