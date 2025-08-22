@@ -66,11 +66,31 @@ function createWindow() {
     });
     childWindow.setContentProtection(true);
     setCustomUserAgent(childWindow.webContents);
+    disableCopyAndSelection(childWindow);
     childWindow.loadURL(url);
     return { action: 'deny' };
   });
 
   mainWindow.loadURL(appConfig.homepageURL);
+}
+
+function disableCopyAndSelection(childWindow: BrowserWindow) {
+  childWindow.webContents.on('before-input-event', (event, input) => {
+    if (
+      (input.control && ['c'].includes(input.key.toLowerCase()))
+    ) {
+      event.preventDefault();
+    }
+  });
+
+  childWindow.webContents.on('did-finish-load', () => {
+    childWindow.webContents.insertCSS(`
+      * {
+        -webkit-user-select: none !important;
+        user-select: none !important;
+      }
+    `);
+  });
 }
 
 app.whenReady().then(createWindow);
