@@ -18,7 +18,7 @@ module.exports = {
   mac: {
     target: ["dmg"],
     category: "public.app-category.education",
-    icon: "assets/icon.icns",
+    icon: "assets/simply.icns",
     hardenedRuntime: true,
     gatekeeperAssess: true,
     entitlements: "build/entitlements.mac.plist",
