@@ -1,9 +1,9 @@
 {
-  "productName": "Testpress LMS",
-  "homepageURL": "https://lmsdemo.testpress.in/",
-  "appId": "TestpressTechLabs.TestpressLMS",
+  "productName": "Wezva Technologies",
+  "homepageURL": "https://wezvatechnologies.testpress.in/",
+  "appId": "TestpressTechLabs.WezvaTechnologies",
   "macAppStoreId": "6745862112",
-  "windowsStoreId": "9PK57X3TM0N2",
+  "windowsStoreId": "9N555Q7LV656",
   "author": "Testpress",
   "description": "Testpress Desktop Application",
   "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
