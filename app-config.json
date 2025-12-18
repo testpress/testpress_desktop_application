@@ -1,9 +1,9 @@
 {
   "productName": "SR Pharmacy",
   "homepageURL": "https://srpharmacy.testpress.in/",
-  "appId": "TestpressTechLabs.WezvaTechnologies",
+  "appId": "TestpressTechLabs.SRPharmacy",
   "macAppStoreId": "6745862112",
-  "windowsStoreId": "9N555Q7LV656",
+  "windowsStoreId": "9PM7B2DBLV5R",
   "author": "Testpress",
   "description": "    SR Pharmacy is an online learning platform that offers easy-to-understand study material focused on pharmacy and the medical field. With over 100,000 students benefiting from its content and a YouTube channel boasting more than 150,000 subscribers, SR Pharmacy has quickly become a trusted name in the field. Known for its simple notes and clear teaching style, it has gained immense popularity among students and continues to grow across various social media platforms.",
   "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
