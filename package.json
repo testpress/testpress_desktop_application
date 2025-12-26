@@ -1,9 +1,9 @@
 {
-  "name": "testpress_desktop_application",
-  "productName": "Testpress",
+  "name": "jtc_desktop_application",
+  "productName": "JTC India",
   "version": "1.0.1",
   "type": "module",
-  "description": "Testpress Desktop Application",
+  "description": "JTC India Desktop Application",
   "author": "Testpress",
   "license": "ISC",
   "main": "dist/main.js",
