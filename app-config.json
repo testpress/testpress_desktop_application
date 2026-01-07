@@ -1,13 +1,13 @@
 {
-  "productName": "Testpress LMS",
-  "homepageURL": "https://lmsdemo.testpress.in/",
+  "productName": "Benzil the Learning app",
+  "homepageURL": "https://benzil.testpress.in/",
   "appId": "TestpressTechLabs.TestpressLMS",
   "macAppStoreId": "6745862112",
-  "windowsStoreId": "9PK57X3TM0N2",
+  "windowsStoreId": "9NF6T9VB9MVT",
   "author": "Testpress",
-  "description": "Testpress Desktop Application",
+  "description": "Benzil is a smart learning app designed to help students study effectively and prepare for exams with ease. The app provides access to structured courses, video lessons, practice tests, and performance tracking all in one place.",
   "provisioningProfile": "lmsdemoDistributionprovisionprofile.provisionprofile",
-  "identity": "Testpress Tech Labs LLP (BHAB7LC35Y)",
+  "identity": "TestpressTechLabs.BenziltheLearningapp",
   "publisherId": "CN=27270D5F-9226-4A37-BF69-03BF0033FD28",
   "publisherDisplayName": "Testpress Tech Labs"
 }
