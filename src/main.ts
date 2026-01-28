@@ -52,7 +52,10 @@ function setupDeviceHeaders(webContents: Electron.WebContents) {
         details.requestHeaders['X-Device-UID'] = deviceUid;
         details.requestHeaders['X-Device-Type'] = deviceType;
       }
-    } catch {}
+    }
+    catch (error) {
+      console.error(`[HeaderManager] Failed to parse request URL: ${details.url}`, error);
+    }
 
     callback({ requestHeaders: details.requestHeaders });
   });
