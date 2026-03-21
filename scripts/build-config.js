@@ -58,13 +58,13 @@ async function downloadFile(url, dest) {
       }
       res.pipe(file);
       file.on('finish', () => {
-        file.close();
-        resolve();
+        file.close(() => resolve());
       });
     }).on('error', (err) => {
-      file.close();
-      if (fs.existsSync(dest)) fs.unlinkSync(dest);
-      reject(err);
+      file.close(() => {
+        if (fs.existsSync(dest)) fs.unlinkSync(dest);
+        reject(err);
+      });
     });
   });
 }
