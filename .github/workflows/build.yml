@@ -66,7 +66,7 @@
 
         - name: Fetch Configuration for ${{ matrix.domain_url }}
           env:
-            DESKTOP_BUILD_KEY: ${{ secrets.DESKTOP_BUILD_KEY }}
+            DESKTOP_BUILD_KEY: ${{ secrets.DESKTOP_APP_CONFIG_API_ACCESS_KEY }}
           run: node scripts/build-config.js ${{ matrix.domain_url }} ${{ github.event.inputs.build_target }} ${{ matrix.os }}
 
         - name: Build and Package (Windows EXE)
