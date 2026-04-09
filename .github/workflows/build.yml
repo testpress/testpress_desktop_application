@@ -37,6 +37,9 @@
           os: [windows-latest, macos-latest]
         fail-fast: false
       runs-on: ${{ matrix.os }}
+      if: |
+        (matrix.os == 'windows-latest' && (github.event.inputs.build_target == 'all' || contains(github.event.inputs.build_target, 'windows'))) ||
+        (matrix.os == 'macos-latest' && (github.event.inputs.build_target == 'all' || contains(github.event.inputs.build_target, 'mac')))
       steps:
         - name: Checkout Code
           uses: actions/checkout@v4
@@ -60,8 +63,8 @@
 
         - name: Sign Electron Package (CastLabs EVS)
           env:
-            CASTLABS_EVS_USER: ${{ secrets.CASTLABS_EVS_USER }}
-            CASTLABS_EVS_PASSWORD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
+            EVS_USER: ${{ secrets.CASTLABS_EVS_USER }}
+            EVS_PASSWORD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
           run: python -m castlabs_evs.vmp sign-pkg node_modules/electron/dist
 
         - name: Fetch Configuration for ${{ matrix.domain_url }}
