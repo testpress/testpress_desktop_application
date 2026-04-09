@@ -38,52 +38,72 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Check Supported OS
+        id: check_os
+        shell: bash
+        run: |
+          if [ "${{ matrix.os }}" = "windows-latest" ] && [[ "${{ github.event.inputs.build_target }}" = "all" || "${{ github.event.inputs.build_target }}" == *"windows"* ]]; then
+            echo "run=true" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.os }}" = "macos-latest" ] && [[ "${{ github.event.inputs.build_target }}" = "all" || "${{ github.event.inputs.build_target }}" == *"mac"* ]]; then
+            echo "run=true" >> $GITHUB_OUTPUT
+          else
+            echo "run=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout Code
+        if: steps.check_os.outputs.run == 'true'
         uses: actions/checkout@v4
 
       - name: Setup Node.js
+        if: steps.check_os.outputs.run == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
       - name: Install Dependencies
+        if: steps.check_os.outputs.run == 'true'
         run: npm ci
 
       - name: Setup Python
+        if: steps.check_os.outputs.run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
       - name: Install CastLabs EVS
+        if: steps.check_os.outputs.run == 'true'
         run: python -m pip install castlabs-evs==1.3.2
 
       - name: Sign Electron Package (CastLabs EVS)
+        if: steps.check_os.outputs.run == 'true'
         env:
           EVS_USER: ${{ secrets.CASTLABS_EVS_USER }}
+          EVS_ACCOUNT: ${{ secrets.CASTLABS_EVS_USER }}
           EVS_PASSWORD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
-        run: python -m castlabs_evs.vmp sign-pkg node_modules/electron/dist
+        run: python -m castlabs_evs.vmp sign-pkg --user "${{ secrets.CASTLABS_EVS_USER }}" --password "${{ secrets.CASTLABS_EVS_PASSWORD }}" node_modules/electron/dist
 
       - name: Fetch Configuration for ${{ matrix.domain_url }}
+        if: steps.check_os.outputs.run == 'true'
         env:
           DESKTOP_BUILD_KEY: ${{ secrets.DESKTOP_APP_CONFIG_API_ACCESS_KEY }}
         run: |
           node scripts/build-config.js ${{ matrix.domain_url }} ${{ github.event.inputs.build_target }} ${{ matrix.os }}
 
       - name: Build and Package (Windows EXE)
-        if: matrix.os == 'windows-latest' && (github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'windows-exe')
+        if: steps.check_os.outputs.run == 'true' && matrix.os == 'windows-latest' && (github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'windows-exe')
         run: npm run dist:win
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Package (Windows Appx)
-        if: matrix.os == 'windows-latest' && (github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'windows-appx')
+        if: steps.check_os.outputs.run == 'true' && matrix.os == 'windows-latest' && (github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'windows-appx')
         run: npm run dist:appx
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Package (macOS DMG)
-        if: matrix.os == 'macos-latest' && (github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'mac-dmg')
+        if: steps.check_os.outputs.run == 'true' && matrix.os == 'macos-latest' && (github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'mac-dmg')
         run: |
           npm run dist:mac-x64
         env:
@@ -91,7 +111,7 @@ jobs:
 
       - name: Zip Build Output (Windows)
         id: zip_win
-        if: matrix.os == 'windows-latest'
+        if: steps.check_os.outputs.run == 'true' && matrix.os == 'windows-latest'
         shell: pwsh
         run: |
           $SUBDOMAIN = "${{ matrix.domain_url }}".Split('.')[0]
@@ -101,7 +121,7 @@ jobs:
 
       - name: Zip Build Output (macOS)
         id: zip_mac
-        if: matrix.os == 'macos-latest'
+        if: steps.check_os.outputs.run == 'true' && matrix.os == 'macos-latest'
         shell: bash
         run: |
           SUBDOMAIN=$(echo "${{ matrix.domain_url }}" | cut -d'.' -f1)
@@ -111,11 +131,13 @@ jobs:
 
       - name: Set Unified Output
         id: zip
+        if: steps.check_os.outputs.run == 'true'
         shell: bash
         run: |
           echo "ZIP_PATH=${{ steps.zip_win.outputs.ZIP_PATH }}${{ steps.zip_mac.outputs.ZIP_PATH }}" >> $GITHUB_OUTPUT
 
       - name: Upload Artifacts
+        if: steps.check_os.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.zip.outputs.ZIP_PATH }}
