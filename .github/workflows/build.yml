@@ -115,7 +115,7 @@ jobs:
         shell: pwsh
         run: |
           $SUBDOMAIN = "${{ matrix.domain_url }}".Split('.')[0]
-          $ZIP_NAME = "testpress-$SUBDOMAIN-win.zip"
+          $ZIP_NAME = "$SUBDOMAIN-win.zip"
           Compress-Archive -Path release\* -DestinationPath $ZIP_NAME
           Add-Content -Path $env:GITHUB_OUTPUT -Value "ZIP_PATH=$ZIP_NAME"
 
@@ -125,7 +125,7 @@ jobs:
         shell: bash
         run: |
           SUBDOMAIN=$(echo "${{ matrix.domain_url }}" | cut -d'.' -f1)
-          ZIP_NAME="testpress-$SUBDOMAIN-mac.zip"
+          ZIP_NAME="$SUBDOMAIN-mac.zip"
           zip -r "$ZIP_NAME" release/
           echo "ZIP_PATH=$ZIP_NAME" >> $GITHUB_OUTPUT
 
