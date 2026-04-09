@@ -81,7 +81,7 @@ jobs:
           EVS_USER: ${{ secrets.CASTLABS_EVS_USER }}
           EVS_ACCOUNT: ${{ secrets.CASTLABS_EVS_USER }}
           EVS_PASSWORD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
-        run: python -m castlabs_evs.vmp sign-pkg node_modules/electron/dist
+        run: python -m castlabs_evs.vmp sign-pkg -A "${{ secrets.CASTLABS_EVS_USER }}" -P "${{ secrets.CASTLABS_EVS_PASSWORD }}" node_modules/electron/dist
 
       - name: Fetch Configuration for ${{ matrix.domain_url }}
         if: steps.check_os.outputs.run == 'true'
