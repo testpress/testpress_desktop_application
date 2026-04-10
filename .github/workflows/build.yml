@@ -107,6 +107,8 @@ jobs:
           npm run dist:mac-x64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVS_USER: ${{ secrets.CASTLABS_EVS_USER }}
+          EVS_PASSWORD: ${{ secrets.CASTLABS_EVS_PASSWORD }}
 
       - name: Zip Build Output (Windows)
         id: zip_win
