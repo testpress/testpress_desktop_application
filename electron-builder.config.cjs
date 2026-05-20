@@ -56,6 +56,7 @@ module.exports = {
     publisher: config.publisherId,
     publisherDisplayName: config.publisherDisplayName,
     displayName: config.productName,
+    backgroundColor: "transparent"
   },
   nsis: {
     oneClick: true,
