@@ -99,10 +99,11 @@ function createWindow() {
   });
 
   mainWindow.webContents.on('did-create-window', (childWindow, details) => {
-    childWindow.setContentProtection(true);
-    setCustomUserAgent(childWindow.webContents);
-    setupDeviceHeaders(childWindow.webContents);
-});
+    if (details.url.includes('/exams/')) {
+      childWindow.setContentProtection(true);
+      setCustomUserAgent(childWindow.webContents);
+    }
+  });
 
   mainWindow.loadURL(appConfig.homepageURL);
 }
