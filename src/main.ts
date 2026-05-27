@@ -82,17 +82,27 @@ function createWindow() {
     if (url.startsWith(GOOGLE_LOGIN_URL_PREFIX)) {
       return { action: 'allow' };
     }
-    const childWindow = new BrowserWindow({
-      ...windowOptions,
-      parent: mainWindow,
-      modal: false,
-      show: true,
-    });
-    childWindow.setContentProtection(true);
-    setCustomUserAgent(childWindow.webContents);
-    setupDeviceHeaders(childWindow.webContents);
-    childWindow.loadURL(url);
+    
+    const isExamWindow = url.includes('/exams/');
+    if (isExamWindow) {
+      return {
+        action: 'allow',
+        overrideBrowserWindowOptions: {
+          ...windowOptions,
+          parent: mainWindow,
+          modal: false,
+          show: true,
+        },
+      };
+    }
     return { action: 'deny' };
+  });
+
+  mainWindow.webContents.on('did-create-window', (childWindow, details) => {
+    if (details.url.includes('/exams/')) {
+      childWindow.setContentProtection(true);
+      setCustomUserAgent(childWindow.webContents);
+    }
   });
 
   mainWindow.loadURL(appConfig.homepageURL);
