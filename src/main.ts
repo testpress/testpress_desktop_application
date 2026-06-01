@@ -96,7 +96,9 @@ function createWindow() {
 
   mainWindow.webContents.on('did-create-window', (childWindow, details) => {
       childWindow.setContentProtection(true);
-      setCustomUserAgent(childWindow.webContents);
+      if (!details.url.startsWith(GOOGLE_LOGIN_URL_PREFIX)) {
+        setCustomUserAgent(childWindow.webContents);
+      }
   });
 
   mainWindow.loadURL(appConfig.homepageURL);
