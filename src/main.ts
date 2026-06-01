@@ -30,7 +30,7 @@ const windowOptions = {
     contextIsolation: true,
     webSecurity: true,
     plugins: true,
-    devTools: false,
+    devTools: true,
   },
 };
 
