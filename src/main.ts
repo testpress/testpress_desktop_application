@@ -83,26 +83,20 @@ function createWindow() {
       return { action: 'allow' };
     }
     
-    const isExamWindow = url.includes('/exams/');
-    if (isExamWindow) {
-      return {
-        action: 'allow',
-        overrideBrowserWindowOptions: {
-          ...windowOptions,
-          parent: mainWindow,
-          modal: false,
-          show: true,
-        },
-      };
-    }
-    return { action: 'deny' };
+    return {
+      action: 'allow',
+      overrideBrowserWindowOptions: {
+        ...windowOptions,
+        parent: mainWindow,
+        modal: false,
+        show: true,
+      },
+    };
   });
 
   mainWindow.webContents.on('did-create-window', (childWindow, details) => {
-    if (details.url.includes('/exams/')) {
       childWindow.setContentProtection(true);
       setCustomUserAgent(childWindow.webContents);
-    }
   });
 
   mainWindow.loadURL(appConfig.homepageURL);
