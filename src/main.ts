@@ -36,7 +36,9 @@ const windowOptions = {
 
 function setCustomUserAgent(webContents: Electron.WebContents) {
   const baseUA = webContents.getUserAgent();
-  webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
+  if (!baseUA.includes('Testpress Desktop Application')) {
+    webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
+  }
 }
 
 function setupDeviceHeaders(webContents: Electron.WebContents) {
@@ -51,6 +53,12 @@ function setupDeviceHeaders(webContents: Electron.WebContents) {
       if (requestUrl.origin === allowedOrigin) {
         details.requestHeaders['X-Device-UID'] = deviceUid;
         details.requestHeaders['X-Device-Type'] = deviceType;
+
+        const uaKey = Object.keys(details.requestHeaders).find(key => key.toLowerCase() === 'user-agent') || 'User-Agent';
+        const userAgent = details.requestHeaders[uaKey];
+        if (userAgent && !userAgent.includes('Testpress Desktop Application')) {
+          details.requestHeaders[uaKey] = `${userAgent} Testpress Desktop Application`;
+        }
       }
     }
     catch (error) {
@@ -82,6 +90,9 @@ function createWindow() {
     if (url.startsWith(GOOGLE_LOGIN_URL_PREFIX)) {
       return { action: 'allow' };
     }
+
+    const baseUA = mainWindow.webContents.getUserAgent();
+    const customUA = baseUA.includes('Testpress Desktop Application') ? baseUA : `${baseUA} Testpress Desktop Application`;
     
     return {
       action: 'allow',
@@ -90,6 +101,10 @@ function createWindow() {
         parent: mainWindow,
         modal: false,
         show: true,
+        webPreferences: {
+          ...windowOptions.webPreferences,
+          userAgent: customUA,
+        },
       },
     };
   });
