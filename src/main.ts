@@ -10,6 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const appConfigPath = join(__dirname, '..', 'app-config.json');
 const appConfig = JSON.parse(readFileSync(appConfigPath, 'utf8'));
+const CUSTOM_USER_AGENT = 'Testpress Desktop Application';
 
 electronUnhandled({
   showDialog: true,
@@ -36,7 +37,9 @@ const windowOptions = {
 
 function setCustomUserAgent(webContents: Electron.WebContents) {
   const baseUA = webContents.getUserAgent();
-  webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
+  if (!baseUA.includes(CUSTOM_USER_AGENT)) {
+    webContents.setUserAgent(`${baseUA} ${CUSTOM_USER_AGENT}`);
+  }
 }
 
 function setupDeviceHeaders(webContents: Electron.WebContents) {
@@ -51,6 +54,12 @@ function setupDeviceHeaders(webContents: Electron.WebContents) {
       if (requestUrl.origin === allowedOrigin) {
         details.requestHeaders['X-Device-UID'] = deviceUid;
         details.requestHeaders['X-Device-Type'] = deviceType;
+
+        const uaKey = Object.keys(details.requestHeaders).find(key => key.toLowerCase() === 'user-agent') || 'User-Agent';
+        const userAgent = details.requestHeaders[uaKey];
+        if (userAgent && !userAgent.includes(CUSTOM_USER_AGENT)) {
+          details.requestHeaders[uaKey] = `${userAgent} ${CUSTOM_USER_AGENT}`;
+        }
       }
     }
     catch (error) {
@@ -82,6 +91,9 @@ function createWindow() {
     if (url.startsWith(GOOGLE_LOGIN_URL_PREFIX)) {
       return { action: 'allow' };
     }
+
+    const baseUA = mainWindow.webContents.getUserAgent();
+    const customUA = baseUA.includes(CUSTOM_USER_AGENT) ? baseUA : `${baseUA} ${CUSTOM_USER_AGENT}`;
     
     return {
       action: 'allow',
@@ -90,6 +102,10 @@ function createWindow() {
         parent: mainWindow,
         modal: false,
         show: true,
+        webPreferences: {
+          ...windowOptions.webPreferences,
+          userAgent: customUA,
+        },
       },
     };
   });
