@@ -10,6 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const appConfigPath = join(__dirname, '..', 'app-config.json');
 const appConfig = JSON.parse(readFileSync(appConfigPath, 'utf8'));
+const CUSTOM_USER_AGENT = 'Testpress Desktop Application';
 
 electronUnhandled({
   showDialog: true,
@@ -36,8 +37,8 @@ const windowOptions = {
 
 function setCustomUserAgent(webContents: Electron.WebContents) {
   const baseUA = webContents.getUserAgent();
-  if (!baseUA.includes('Testpress Desktop Application')) {
-    webContents.setUserAgent(`${baseUA} Testpress Desktop Application`);
+  if (!baseUA.includes(CUSTOM_USER_AGENT)) {
+    webContents.setUserAgent(`${baseUA} ${CUSTOM_USER_AGENT}`);
   }
 }
 
@@ -56,8 +57,8 @@ function setupDeviceHeaders(webContents: Electron.WebContents) {
 
         const uaKey = Object.keys(details.requestHeaders).find(key => key.toLowerCase() === 'user-agent') || 'User-Agent';
         const userAgent = details.requestHeaders[uaKey];
-        if (userAgent && !userAgent.includes('Testpress Desktop Application')) {
-          details.requestHeaders[uaKey] = `${userAgent} Testpress Desktop Application`;
+        if (userAgent && !userAgent.includes(CUSTOM_USER_AGENT)) {
+          details.requestHeaders[uaKey] = `${userAgent} ${CUSTOM_USER_AGENT}`;
         }
       }
     }
@@ -92,7 +93,7 @@ function createWindow() {
     }
 
     const baseUA = mainWindow.webContents.getUserAgent();
-    const customUA = baseUA.includes('Testpress Desktop Application') ? baseUA : `${baseUA} Testpress Desktop Application`;
+    const customUA = baseUA.includes(CUSTOM_USER_AGENT) ? baseUA : `${baseUA} ${CUSTOM_USER_AGENT}`;
     
     return {
       action: 'allow',
