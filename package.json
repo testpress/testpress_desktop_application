@@ -9,6 +9,7 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
+    "postinstall": "node scripts/reinstall-electron.cjs",
     "start": "npm run build && electron .",
     "dist": "npm run build && electron-builder",
     "dist:mac-arm": "npm run build && electron-builder --config electron-builder.config.cjs --mac --arm64",
