@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, session } from 'electron';
 import electronUnhandled from 'electron-unhandled';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -92,9 +92,6 @@ function createWindow() {
       return { action: 'allow' };
     }
 
-    const baseUA = mainWindow.webContents.getUserAgent();
-    const customUA = baseUA.includes(CUSTOM_USER_AGENT) ? baseUA : `${baseUA} ${CUSTOM_USER_AGENT}`;
-    
     return {
       action: 'allow',
       overrideBrowserWindowOptions: {
@@ -102,10 +99,6 @@ function createWindow() {
         parent: mainWindow,
         modal: false,
         show: true,
-        webPreferences: {
-          ...windowOptions.webPreferences,
-          userAgent: customUA,
-        },
       },
     };
   });
@@ -120,7 +113,10 @@ function createWindow() {
   mainWindow.loadURL(appConfig.homepageURL);
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  app.userAgentFallback = `${session.defaultSession.getUserAgent()} ${CUSTOM_USER_AGENT}`;
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
