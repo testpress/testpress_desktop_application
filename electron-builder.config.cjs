@@ -51,6 +51,24 @@ module.exports = {
     ],
     icon: "assets/icon.ico"
   },
+  linux: {
+    target: [
+      {
+        target: "deb",
+        arch: ["x64"]
+      },
+      {
+        target: "AppImage",
+        arch: ["x64"]
+      }
+    ],
+    category: "Education",
+    maintainer: "Testpress <support@testpress.in>",
+    icon: "assets/icon-linux.png"
+  },
+  deb: {
+    compression: "gz"
+  },
   appx: {
     identityName: config.appId,
     publisher: config.publisherId,

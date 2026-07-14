@@ -16,6 +16,9 @@
     "dist:mac-x64": "npm run build && electron-builder --config electron-builder.config.cjs --mac --x64",
     "dist:win": "npm run build && electron-builder --config electron-builder.config.cjs --win nsis --x64",
     "dist:appx": "npm run build && electron-builder --config electron-builder.config.cjs --win appx --x64",
+    "dist:linux": "npm run build && electron-builder --config electron-builder.config.cjs --linux deb AppImage --x64",
+    "dist:linux-deb": "npm run build && electron-builder --config electron-builder.config.cjs --linux deb --x64",
+    "dist:linux-appimage": "npm run build && electron-builder --config electron-builder.config.cjs --linux AppImage --x64",
     "dist:mas": "npm run build && electron-builder --config electron-builder.config.cjs --mac mas --universal",
     "dist:mas-dev": "npm run build && electron-builder --config electron-builder.config.cjs --mac mas-dev --universal"
   },
