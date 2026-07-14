@@ -185,7 +185,22 @@ jobs:
         run: |
           SUBDOMAIN=$(echo "${{ matrix.domain_url }}" | cut -d'.' -f1)
           ZIP_NAME="$SUBDOMAIN-linux.zip"
-          zip -r "$ZIP_NAME" release/
+          BUILD_TARGET="${{ github.event.inputs.build_target }}"
+
+          if [ "$BUILD_TARGET" = "ubuntu-deb" ]; then
+            mapfile -d '' PACKAGE_FILES < <(find release -type f -name '*.deb' -print0)
+          elif [ "$BUILD_TARGET" = "linux-appimage" ]; then
+            mapfile -d '' PACKAGE_FILES < <(find release -type f -name '*.AppImage' -print0)
+          else
+            mapfile -d '' PACKAGE_FILES < <(find release -type f \( -name '*.deb' -o -name '*.AppImage' \) -print0)
+          fi
+
+          if [ "${#PACKAGE_FILES[@]}" -eq 0 ]; then
+            echo "No Linux packages found for build target: $BUILD_TARGET" >&2
+            exit 1
+          fi
+
+          zip -j "$ZIP_NAME" "${PACKAGE_FILES[@]}"
           echo "ZIP_PATH=$ZIP_NAME" >> $GITHUB_OUTPUT
 
       - name: Set Unified Output
