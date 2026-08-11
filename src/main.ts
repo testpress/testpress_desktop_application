@@ -23,6 +23,7 @@ app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 let mainWindow: BrowserWindow;
 
 const windowOptions = {
+  title: appConfig.productName,
   width: 1200,
   height: 800,
   webPreferences: {
