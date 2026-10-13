@@ -1,4 +1,4 @@
-import { app, BrowserWindow, session } from 'electron';
+import { app, BrowserWindow, session, ipcMain, dialog } from 'electron';
 import electronUnhandled from 'electron-unhandled';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -27,6 +27,7 @@ const windowOptions = {
   width: 1200,
   height: 800,
   webPreferences: {
+    preload: join(__dirname, 'preload.js'),
     nodeIntegration: false,
     sandbox: true,
     contextIsolation: true,
@@ -113,6 +114,29 @@ function createWindow() {
 
   mainWindow.loadURL(appConfig.homepageURL);
 }
+
+interface DeviceBindingPopupOptions {
+  message: string;
+  title?: string;
+}
+
+ipcMain.handle('show-device-binding-popup', async (event, options: DeviceBindingPopupOptions) => {
+  if (!mainWindow || mainWindow.isDestroyed()) {
+    return false;
+  }
+
+  const { message, title } = options || {};
+  const result = await dialog.showMessageBox(mainWindow, {
+    type: 'question',
+    buttons: ['Cancel', 'Confirm'],
+    defaultId: 1,
+    cancelId: 0,
+    title: title || 'Device Binding',
+    message: message || 'Do you want to bind this device to your account?',
+  });
+
+  return result.response === 1;
+});
 
 app.whenReady().then(() => {
   app.userAgentFallback = `${session.defaultSession.getUserAgent()} ${CUSTOM_USER_AGENT}`;
